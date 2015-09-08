@@ -211,6 +211,28 @@ public abstract class ExpandableRecyclerAdapter<PVH extends ParentViewHolder, CV
     public abstract void onBindChildViewHolder(CVH childViewHolder, int position, Object childObject);
 
     /**
+     * Adds parent and child items to existing list.
+     * @param parentItemList
+     */
+    public void addItems(List<ParentObject> parentItemList) {
+        mParentItemList.addAll(parentItemList);
+        mHelperItemList = ExpandableRecyclerAdapterHelper.generateHelperItemList(parentItemList);
+        mStableIdMap = generateStableIdMapFromList(mHelperItemList);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Replaces all parent and child items in list with provided ones.
+     * @param parentItemList
+     */
+    public void replaceItems(List<ParentObject> parentItemList) {
+        mParentItemList = parentItemList;
+        mHelperItemList = ExpandableRecyclerAdapterHelper.generateHelperItemList(parentItemList);
+        mStableIdMap = generateStableIdMapFromList(mHelperItemList);
+        notifyDataSetChanged();
+    }
+
+    /**
      * Returns the size of the list that contains Parent and Child objects
      *
      * @return integer value of the size of the Parent/Child list
