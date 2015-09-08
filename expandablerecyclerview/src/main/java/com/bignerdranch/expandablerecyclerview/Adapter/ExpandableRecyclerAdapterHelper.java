@@ -20,14 +20,29 @@ public class ExpandableRecyclerAdapterHelper {
             ParentWrapper parentWrapper = new ParentWrapper(parentObject, sCurrentId);
             sCurrentId++;
             parentWrapperList.add(parentWrapper);
-            if (parentObject.isInitiallyExpanded()) {
-                parentWrapper.setExpanded(true);
-                for (int j = 0; j < parentObject.getChildObjectList().size(); j++) {
-                    parentWrapperList.add(parentObject.getChildObjectList().get(j));
-                }
-            }
+            expandParentIfNecessary(parentWrapperList, parentObject, parentWrapper);
         }
         sCurrentId = 0;
         return parentWrapperList;
+    }
+
+    public static List<Object> updateHelperItemList(List<Object> parentWrapperList, List<? extends ParentObject> itemList) {
+
+        for (ParentObject parentObject : itemList) {
+            ParentWrapper parentWrapper = new ParentWrapper(parentObject, sCurrentId);
+            sCurrentId++;
+            parentWrapperList.add(parentWrapper);
+            expandParentIfNecessary(parentWrapperList, parentObject, parentWrapper);
+        }
+        return parentWrapperList;
+    }
+
+    private static void expandParentIfNecessary(List<Object> parentWrapperList, ParentObject parentObject, ParentWrapper parentWrapper) {
+        if (parentObject.isInitiallyExpanded()) {
+            parentWrapper.setExpanded(true);
+            for (int j = 0; j < parentObject.getChildObjectList().size(); j++) {
+                parentWrapperList.add(parentObject.getChildObjectList().get(j));
+            }
+        }
     }
 }

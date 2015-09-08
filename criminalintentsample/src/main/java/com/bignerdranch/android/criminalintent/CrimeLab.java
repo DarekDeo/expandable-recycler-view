@@ -40,4 +40,14 @@ public class CrimeLab {
         }
         return null;
     }
+
+    public Crime generateNewCrime() {
+
+        Crime crime = new Crime();
+        crime.setTitle("Crime #" + mCrimes.size());
+        crime.setSolved(false);
+        mCrimes.add(crime);
+
+        return crime;
+    }
 }

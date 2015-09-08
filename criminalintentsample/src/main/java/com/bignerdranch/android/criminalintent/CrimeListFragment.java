@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 
@@ -16,6 +17,8 @@ import java.util.List;
 public class CrimeListFragment extends Fragment {
 
     private RecyclerView mCrimeRecyclerView;
+    private Button buttonAddNewCrime;
+    CrimeExpandableAdapter crimeExpandableAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,13 +28,15 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        CrimeExpandableAdapter crimeExpandableAdapter = new CrimeExpandableAdapter(getActivity(), generateCrimes());
+        crimeExpandableAdapter = new CrimeExpandableAdapter(getActivity(), generateCrimes());
         crimeExpandableAdapter.setCustomParentAnimationViewId(R.id.parent_list_item_expand_arrow);
         crimeExpandableAdapter.setParentClickableViewAnimationDefaultDuration();
         crimeExpandableAdapter.setParentAndIconExpandOnClick(true);
         crimeExpandableAdapter.onRestoreInstanceState(savedInstanceState);
 
         mCrimeRecyclerView.setAdapter(crimeExpandableAdapter);
+
+        buttonAddNewCrime = (Button) view.findViewById(R.id.button_add_crime);
 
         return view;
     }
@@ -51,6 +56,36 @@ public class CrimeListFragment extends Fragment {
             crime.setChildObjectList(childList);
             parentObjects.add(crime);
         }
+        return parentObjects;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        buttonAddNewCrime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crimeExpandableAdapter.addItems(addCrime());
+            }
+        });
+    }
+
+    @Override
+    public void onStop() {
+        buttonAddNewCrime.setOnClickListener(null);
+        super.onStop();
+    }
+
+    private ArrayList<ParentObject> addCrime() {
+        CrimeLab crimeLab = CrimeLab.get(getActivity());
+        Crime crime = crimeLab.generateNewCrime();
+        ArrayList<ParentObject> parentObjects = new ArrayList<>();
+
+        ArrayList<Object> childList = new ArrayList<>();
+        childList.add(new CrimeChild(crime.getDate(), crime.isSolved()));
+        crime.setChildObjectList(childList);
+        parentObjects.add(crime);
+
         return parentObjects;
     }
 }
