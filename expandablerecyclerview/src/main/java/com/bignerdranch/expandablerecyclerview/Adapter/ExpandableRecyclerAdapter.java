@@ -216,8 +216,9 @@ public abstract class ExpandableRecyclerAdapter<PVH extends ParentViewHolder, CV
      */
     public void addItems(List<ParentObject> parentItemList) {
         mParentItemList.addAll(parentItemList);
-        mHelperItemList = ExpandableRecyclerAdapterHelper.updateHelperItemList(mHelperItemList, parentItemList);
-        mStableIdMap = generateStableIdMapFromList(mHelperItemList);
+        List<Object> parentWrapperList = ExpandableRecyclerAdapterHelper.updateHelperItemList(parentItemList);
+        mHelperItemList.addAll(parentWrapperList);
+        mStableIdMap.putAll(generateStableIdMapFromList(parentWrapperList));
         notifyDataSetChanged();
     }
 

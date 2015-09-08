@@ -26,8 +26,8 @@ public class ExpandableRecyclerAdapterHelper {
         return parentWrapperList;
     }
 
-    public static List<Object> updateHelperItemList(List<Object> parentWrapperList, List<? extends ParentObject> itemList) {
-
+    public static List<Object> updateHelperItemList(List<? extends ParentObject> itemList) {
+        ArrayList<Object> parentWrapperList = new ArrayList<>();
         for (ParentObject parentObject : itemList) {
             ParentWrapper parentWrapper = new ParentWrapper(parentObject, sCurrentId);
             sCurrentId++;
