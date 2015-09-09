@@ -14,35 +14,28 @@ public class ExpandableRecyclerAdapterHelper {
 
 
     public static List<Object> generateHelperItemList(List<? extends ParentObject> itemList) {
+        sCurrentId = 0;
+        return generateWrapperList(itemList);
+    }
+
+    public static List<Object> updateHelperItemList(List<? extends ParentObject> itemList) {
+        return generateWrapperList(itemList);
+    }
+
+    private static List<Object> generateWrapperList(List<? extends ParentObject> itemList) {
         ArrayList<Object> parentWrapperList = new ArrayList<>();
         for (int i = 0; i < itemList.size(); i++) {
             ParentObject parentObject = itemList.get(i);
             ParentWrapper parentWrapper = new ParentWrapper(parentObject, sCurrentId);
             sCurrentId++;
             parentWrapperList.add(parentWrapper);
-            expandParentIfNecessary(parentWrapperList, parentObject, parentWrapper);
-        }
-        sCurrentId = 0;
-        return parentWrapperList;
-    }
-
-    public static List<Object> updateHelperItemList(List<? extends ParentObject> itemList) {
-        ArrayList<Object> parentWrapperList = new ArrayList<>();
-        for (ParentObject parentObject : itemList) {
-            ParentWrapper parentWrapper = new ParentWrapper(parentObject, sCurrentId);
-            sCurrentId++;
-            parentWrapperList.add(parentWrapper);
-            expandParentIfNecessary(parentWrapperList, parentObject, parentWrapper);
-        }
-        return parentWrapperList;
-    }
-
-    private static void expandParentIfNecessary(List<Object> parentWrapperList, ParentObject parentObject, ParentWrapper parentWrapper) {
-        if (parentObject.isInitiallyExpanded()) {
-            parentWrapper.setExpanded(true);
-            for (int j = 0; j < parentObject.getChildObjectList().size(); j++) {
-                parentWrapperList.add(parentObject.getChildObjectList().get(j));
+            if (parentObject.isInitiallyExpanded()) {
+                parentWrapper.setExpanded(true);
+                for (int j = 0; j < parentObject.getChildObjectList().size(); j++) {
+                    parentWrapperList.add(parentObject.getChildObjectList().get(j));
+                }
             }
         }
+        return parentWrapperList;
     }
 }
