@@ -21,6 +21,14 @@ public class CrimeListFragment extends Fragment {
     CrimeExpandableAdapter crimeExpandableAdapter;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        crimeExpandableAdapter = new CrimeExpandableAdapter(getActivity(), generateCrimes());
+        crimeExpandableAdapter.onRestoreInstanceState(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
@@ -28,11 +36,9 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        crimeExpandableAdapter = new CrimeExpandableAdapter(getActivity(), generateCrimes());
         crimeExpandableAdapter.setCustomParentAnimationViewId(R.id.parent_list_item_expand_arrow);
         crimeExpandableAdapter.setParentClickableViewAnimationDefaultDuration();
         crimeExpandableAdapter.setParentAndIconExpandOnClick(true);
-        crimeExpandableAdapter.onRestoreInstanceState(savedInstanceState);
 
         mCrimeRecyclerView.setAdapter(crimeExpandableAdapter);
 
